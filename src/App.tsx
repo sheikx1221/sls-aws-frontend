@@ -6,9 +6,9 @@ function App() {
     <BrowserRouter>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container">
-          <Link to="/" className="navbar-brand">Handicrafts</Link>
+          <Link to="/" className="navbar-brand">SLS Handicrafts</Link>
           <div>
-            <Link to="/cart" className="btn btn-outline-light">Cart</Link>
+            <Link to="/cart" className="btn btn-outline-light">Your Cart</Link>
           </div>
         </div>
       </nav>
