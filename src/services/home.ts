@@ -9,7 +9,7 @@ type RESPONSE_LIST = {
 
 let lastEvaluatedKey: string | null = null;
 export async function getCraftsFromAPI() {
-    let url = '/handicrafts';
+    let url = '/handicrafts/list';
     if (lastEvaluatedKey) {
         url = url + `?exclusiveStartKey=${lastEvaluatedKey}`;
     }

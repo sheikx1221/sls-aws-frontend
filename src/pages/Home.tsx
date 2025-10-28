@@ -1,7 +1,8 @@
 import { useEffect, useEffectEvent, useState } from "react";
-import { Skeleton } from "../components/skeleton";
+import { Skeleton } from "../components/products/skeleton";
 import { getCraftsFromAPI } from "../services/home";
 import type { Handicrafts } from "../types/handicrafts";
+import { ProductList } from "../components/products/product";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -13,6 +14,7 @@ export default function Home() {
     if ("error" in response) {
       setError(response.error);
     } else {
+        setCrafts(response);
     }
     setLoading(false);
   });
@@ -32,11 +34,11 @@ export default function Home() {
 
   return (
     <div className="d-flex flex-column flex-fill">
-        <div className="m-3 d-flex flex-column align-items-center">
-            <h1>Handicrafts Shop</h1>
-            <p className="lead">Unique handmade items from artisans</p>
-        </div>
-      {loading && <Skeleton gridColumns={3} gridRows={3} />}
+      <div className="m-3 d-flex flex-column align-items-center">
+        <h1>Handicrafts Shop</h1>
+        <p className="lead">Unique handmade items from artisans</p>
+      </div>
+      {loading && <Skeleton />}
       {error !== "" && (
         <div
           style={{ height: "75vh" }}
@@ -57,40 +59,13 @@ export default function Home() {
         </div>
       )}
       {crafts.length > 0 && (
-        <>
-          {crafts.map((craft, index) => (
-            <div className="col-md-4 mb-4" key={index}>
-              <div className="card">
-                <div className="skeleton-img-wrapper">
-                  <div className="skeleton-animate skeleton-img">
-                    <img src={craft.images[0]} />
-                  </div>
-                  <div className="skeleton-category">
-                    <p >{craft.category}</p>
-                  </div>
-                </div>
-                <div className="card-body d-flex flex-column flex-grow-1">
-                  <div className="d-flex align-items-center mb-2">
-                    <div className="skeleton-line flex-grow-1">
-                        {craft.name}
-                    </div>
-                    <div className="skeleton-price">
-                        {"$" + craft.price}
-                    </div>
-                  </div>
-                  <div className="mt-auto">
-                    <button className="skeleton-btn gray skeleton-animate">
-                      View
-                    </button>
-                    <button className="skeleton-btn black skeleton-animate">
-                      Add to cart
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </>
+        <div className="container py-4">
+          <div className="row">
+            {crafts.map((craft, index) => (
+                <ProductList key={index} item={craft} />
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

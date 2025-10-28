@@ -1,14 +1,8 @@
 import './skeleton.scss';
 
-interface Props {
-  gridRows: number;
-  gridColumns: number;
-}
-export function Skeleton(props: Props) {
-  const { gridRows = 1, gridColumns = 3 } = props as any;
-
+export function Skeleton() {
   const cards: number[] = Array.from(
-    { length: gridRows * gridColumns },
+    { length: 12 },
     (_, i) => i
   );
 
@@ -16,7 +10,7 @@ export function Skeleton(props: Props) {
     <div className="container py-4">
       <div className="row">
         {cards.map((c) => (
-          <div className="col-md-4 mb-4" key={c}>
+          <div className="col-md-3 mb-3" key={c}>
             <div className="card skeleton-card">
               <div className="skeleton-img-wrapper">
                 <div className="skeleton-animate skeleton-img"></div>
