@@ -1,5 +1,6 @@
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
+import { AppProvider } from './providers/app'
 
 function App() {
   return (
@@ -13,9 +14,11 @@ function App() {
         </div>
       </nav>
       <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
+        <AppProvider >
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </AppProvider>
       </main>
     </BrowserRouter>
   )

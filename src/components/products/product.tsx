@@ -1,26 +1,28 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { addToCart } from "../../services/cart";
 import type { Handicrafts } from "../../types/handicrafts";
 import "./skeleton.scss";
-import { addToCart } from "../../services/cart";
-import { useNavigate } from "react-router-dom";
 
 interface Props {
   item: Handicrafts;
+  added: boolean;
 }
 export function ProductList(props: Props) {
-  const [added, setAdded] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const navigation = useNavigate();
 
   const onViewProduct = () => {
-    
-  }
+    navigation(`/crafts/${props.item.craftId}`);
+  };
   const onAddToCart = async () => {
-    setLoading(true);
-    const response = await addToCart(props.item.craftId, props.item.price);
-    if (response) setAdded(true);
-    setLoading(false);
-  }
+    if (!props.added) {
+        setLoading(true);
+        await addToCart(props.item);
+        setLoading(false);
+    }
+  };
 
   return (
     <div className="col-md-3 mb-3">
@@ -59,12 +61,11 @@ export function ProductList(props: Props) {
               onClick={onAddToCart}
               className="skeleton-btn black text-white btn"
             >
-                {loading
-                    ? 'Adding to cart...'
-                    : added
-                        ? 'Open cart'
-                        : 'Add to cart'
-                }
+              {loading
+                ? "Adding to cart..."
+                : props.added
+                ? "Added"
+                : "Add to cart"}
             </button>
           </div>
         </div>
