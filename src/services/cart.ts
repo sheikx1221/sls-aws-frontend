@@ -9,14 +9,14 @@ type RESPONSE_LIST = {
     lastEvaluatedKey: string | null
 }
 
-export async function addToCart(handicraft: Handicrafts) {
+export async function addToCartAPI(handicraft: Handicrafts) {
     const response = await post('/carts', {
-        craftId: handicraft.craftId,
-        category: handicraft.category,
-        craftName: handicraft.name,
-        image: handicraft.images[0],
         qty: 1,
         amount: handicraft.price,
+        craftName: handicraft.name,
+        image: handicraft.images[0],
+        craftId: handicraft.craftId,
+        category: handicraft.category,
         deviceFingerprint: fingerprint,
     });
 

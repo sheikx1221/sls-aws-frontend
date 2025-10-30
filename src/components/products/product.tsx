@@ -1,16 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addToCart } from "../../services/cart";
 import type { Handicrafts } from "../../types/handicrafts";
 import "./skeleton.scss";
-
 interface Props {
   item: Handicrafts;
   added: boolean;
+  addToCart: (item: Handicrafts) => Promise<boolean>
 }
 export function ProductList(props: Props) {
   const [loading, setLoading] = useState(false);
-
   const navigation = useNavigate();
 
   const onViewProduct = () => {
@@ -19,7 +17,8 @@ export function ProductList(props: Props) {
   const onAddToCart = async () => {
     if (!props.added) {
         setLoading(true);
-        await addToCart(props.item);
+        const added = await props.addToCart(props.item);
+        if (!added) alert('Failed to add item in cart!, please try again');
         setLoading(false);
     }
   };

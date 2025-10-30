@@ -45,6 +45,7 @@ export default function Home() {
               <ProductList
                 key={index}
                 item={craft}
+                addToCart={appContext.addToCart}
                 added={appContext.checkInCart(craft.craftId)}
               />
             ))}
