@@ -1,16 +1,18 @@
-import { useContext } from "react";
+import { observer } from "mobx-react";
 import { ProductList } from "../components/products/product";
 import { Skeleton } from "../components/products/skeleton";
-import { AppContext } from "../providers/app";
+import { cartStore } from "../stores/cart.store";
+import { craftStore } from "../stores/craft.store";
 
-export default function Home() {
-  const appContext = useContext(AppContext);
-
+const Home = observer(() => {
   const retrySearch = () => {
     setTimeout(() => {
-        appContext.reloadCrafts();
-    }, 1500);
+        craftStore.reloadCrafts();
+    }, 800);
   };
+
+  const craftStates = craftStore.getStates();
+  const crafts = craftStore.getCrafts();
 
   return (
     <div className="d-flex flex-column flex-fill">
@@ -18,8 +20,8 @@ export default function Home() {
         <h1>Handicrafts Shop</h1>
         <p className="lead">Unique handmade items from artisans</p>
       </div>
-      {appContext.loading.crafts && <Skeleton />}
-      {appContext.error.crafts !== "" && (
+      {craftStates.loading.list && <Skeleton />}
+      {craftStates.error.list !== "" && (
         <div
           style={{ height: "75vh" }}
           className="d-flex flex-column justify-content-center"
@@ -31,22 +33,22 @@ export default function Home() {
                 moment!
               </p>
             </blockquote>
-            <figcaption className="blockquote-footer">{appContext.error.crafts}</figcaption>
+            <figcaption className="blockquote-footer">{craftStates.error.list}</figcaption>
             <button onClick={retrySearch} className="btn btn-primary">
               Let's Retry!
             </button>
           </figure>
         </div>
       )}
-      {appContext.crafts.length > 0 && (
+      {crafts.length > 0 && (
         <div className="container py-4">
           <div className="row">
-            {appContext.crafts.map((craft, index) => (
+            {crafts.map((craft, index) => (
               <ProductList
                 key={index}
                 item={craft}
-                addToCart={appContext.addToCart}
-                added={appContext.checkInCart(craft.craftId)}
+                addToCart={cartStore.addItemToCart.bind(cartStore)}
+                added={cartStore.checkInCart(craft.craftId)}
               />
             ))}
           </div>
@@ -54,4 +56,6 @@ export default function Home() {
       )}
     </div>
   );
-}
+})
+
+export default Home;

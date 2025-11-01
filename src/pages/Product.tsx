@@ -1,13 +1,14 @@
-import { useContext, useEffect, useEffectEvent, useState } from "react";
+import { observer } from "mobx-react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { AppContext } from "../providers/app";
-import type { Handicrafts } from "../types/handicrafts";
-import type { CartItem } from "../types/cart";
 import Skeleton from "../components/carts/skeleton";
+import type { CartItem } from "../types/cart";
+import type { Handicrafts } from "../types/handicrafts";
+import { craftStore } from "../stores/craft.store";
+import { cartStore } from "../stores/cart.store";
 
-export function Product() {
+const Product = observer(() => {
   const params = useParams<{ craftId: string }>();
-  const appContext = useContext(AppContext);
   const navigation = useNavigate();
 
   const [qty, setQty] = useState<number>(1);
@@ -21,17 +22,20 @@ export function Product() {
   const zoomOut = () => setZoom((z) => Math.max(1, +(z - 0.25).toFixed(2)));
   const resetZoom = () => setZoom(1);
 
+  const cartStates = cartStore.getStates();
+  const craftStates = craftStore.getStates();
+
   const getCraft = useEffectEvent(async () => {
     if (!params.craftId) {
       navigation("/");
     } else {
-      const response = await appContext.getCraft(params.craftId);
+      const response = await craftStore.getCraft(params.craftId);
       setCraft(response);
     }
   });
   const getCartItem = useEffectEvent(async () => {
     if (params.craftId) {
-      const response = await appContext.getCartItem(params.craftId);
+      const response = await cartStore.getCartItem(params.craftId);
       console.log("appContext.getCartItem response = ", response);
       setCartItem(response);
       if (response) setQty(response.qty);
@@ -44,23 +48,31 @@ export function Product() {
 
   const updateCart = async () => {
     if (cartItem) {
-      const response = await appContext.updateCart(cartItem.cartId, qty);
+      const response = await cartStore.updateItemInCart(cartItem.cartId, qty);
       if (response) setCartItem(response);
     }
-  }
+  };
 
   const addToCart = async () => {
     if (craft) {
-      const response = await appContext.addToCart(craft, qty);
+      const response = await cartStore.addItemToCart(craft, qty);
       setCartItem(response);
     }
-  }
+  };
 
   const removeFromCart = async () => {
-    
-  }
+    if (cartItem) {
+      const response = await cartStore.deleteItemFromCart(cartItem.cartId);
+      if (response) {
+        navigation("/");
+      }
+    }
+  };
 
-  const retrySearch = () => {};
+  const retrySearch = () => {
+        getCraft();
+        getCartItem();
+  };
 
   return (
     <div className="d-flex flex-column flex-fill">
@@ -68,10 +80,8 @@ export function Product() {
         <h1>Handicrafts Shop</h1>
         <p className="lead">Unique handmade items from artisans</p>
       </div>
-      {appContext.loading.craft && (
-        <Skeleton />
-      )}
-      {appContext.error.craft !== "" && (
+      {craftStates.loading.get && <Skeleton />}
+      {craftStates.error.get !== "" && (
         <div
           style={{ height: "75vh" }}
           className="d-flex flex-column justify-content-center"
@@ -84,7 +94,7 @@ export function Product() {
               </p>
             </blockquote>
             <figcaption className="blockquote-footer">
-              {appContext.error.crafts}
+              {craftStates.error.get}
             </figcaption>
             <button onClick={retrySearch} className="btn btn-primary">
               Let's Retry!
@@ -115,7 +125,10 @@ export function Product() {
                     }}
                   />
 
-                  <div className="position-absolute" style={{ right: 8, top: 8 }}>
+                  <div
+                    className="position-absolute"
+                    style={{ right: 8, top: 8 }}
+                  >
                     <div className="d-flex flex-column gap-2">
                       <button
                         onClick={zoomIn}
@@ -158,7 +171,10 @@ export function Product() {
               </div>
             </div>
             <div className="col-12 col-md-7">
-              <div className="d-flex flex-column justify-content-around" style={{ height: 360 }}>
+              <div
+                className="d-flex flex-column justify-content-around"
+                style={{ height: 360 }}
+              >
                 {/* NAME */}
                 <div>
                   <h1 className="h4 mb-1 text-white">{craft.name}</h1>
@@ -175,7 +191,7 @@ export function Product() {
                       ${(qty * craft.price).toFixed(2)}
                     </div>
                   </div>
-                  
+
                   <div className="d-flex flex-column gap-3">
                     <div className="d-flex align-items-center gap-3 mb-3">
                       <div className="d-flex align-items-center">
@@ -206,17 +222,28 @@ export function Product() {
                     <div className="d-flex flex-row gap-2 mb-2">
                       {cartItem ? (
                         <>
-                          <button onClick={updateCart} className="btn btn-primary">
-                            {appContext.loading.cart ? 'Updating Cart...': 'Update Cart'}
+                          <button
+                            onClick={updateCart}
+                            className="btn btn-primary"
+                          >
+                            {cartStates.loading.update
+                              ? "Updating Cart..."
+                              : "Update Cart"}
                           </button>
-                          <button className="btn btn-danger">Remove</button>
+                          <button
+                            onClick={removeFromCart}
+                            className="btn btn-danger"
+                          >
+                            {cartStates.loading.delete ? "Remove..." : "Remove"}
+                          </button>
                         </>
                       ) : (
                         <button onClick={addToCart} className="btn btn-primary">
-                          {appContext.loading.cart ? 'Adding to Cart...': 'Add to Cart'}
+                          {cartStates.loading.add
+                            ? "Adding to Cart..."
+                            : "Add to Cart"}
                         </button>
                       )}
-                      
                     </div>
                   </div>
                 </div>
@@ -248,4 +275,6 @@ export function Product() {
       )}
     </div>
   );
-}
+});
+
+export default Product;

@@ -1,7 +1,6 @@
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
-import { AppProvider } from './providers/app'
-import { Product } from './pages/Product'
+import Product from './pages/Product'
 
 function App() {
   return (
@@ -15,12 +14,10 @@ function App() {
         </div>
       </nav>
       <main>
-        <AppProvider >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/crafts/:craftId" element={<Product />}/>
-          </Routes>
-        </AppProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/crafts/:craftId" element={<Product />}/>
+        </Routes>
       </main>
     </BrowserRouter>
   )
