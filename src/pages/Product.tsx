@@ -6,6 +6,7 @@ import type { CartItem } from "../types/cart";
 import type { Handicrafts } from "../types/handicrafts";
 import { craftStore } from "../stores/craft.store";
 import { cartStore } from "../stores/cart.store";
+import { Loader } from "../components/common/loader";
 
 const Product = observer(() => {
   const params = useParams<{ craftId: string }>();
@@ -227,20 +228,20 @@ const Product = observer(() => {
                             className="btn btn-primary"
                           >
                             {cartStates.loading.update
-                              ? "Updating Cart..."
+                              ? <Loader />
                               : "Update Cart"}
                           </button>
                           <button
                             onClick={removeFromCart}
                             className="btn btn-danger"
                           >
-                            {cartStates.loading.delete ? "Remove..." : "Remove"}
+                            {cartStates.loading.delete ? <Loader /> : "Remove"}
                           </button>
                         </>
                       ) : (
                         <button onClick={addToCart} className="btn btn-primary">
                           {cartStates.loading.add
-                            ? "Adding to Cart..."
+                            ? <Loader />
                             : "Add to Cart"}
                         </button>
                       )}

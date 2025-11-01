@@ -18,7 +18,7 @@ const Home = observer(() => {
     <div className="d-flex flex-column flex-fill">
       <div className="m-3 d-flex flex-column align-items-center">
         <h1>Handicrafts Shop</h1>
-        <p className="lead">Unique handmade items from artisans</p>
+        <p className="lead text-center">Unique handmade items from artisans</p>
       </div>
       {craftStates.loading.list && <Skeleton />}
       {craftStates.error.list !== "" && (

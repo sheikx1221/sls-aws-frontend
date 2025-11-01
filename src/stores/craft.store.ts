@@ -23,6 +23,7 @@ class Craft {
     }
 
     reloadCrafts () {
+        this.crafts = [];
         this.listCrafts();
     }
 

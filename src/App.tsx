@@ -1,6 +1,7 @@
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
-import Product from './pages/Product'
+import Product from './pages/Product';
+import { BsCartFill } from "react-icons/bs";
 
 function App() {
   return (
@@ -9,7 +10,9 @@ function App() {
         <div className="container">
           <Link to="/" className="navbar-brand">SLS Handicrafts</Link>
           <div>
-            <Link to="/cart" className="btn btn-outline-light">Your Cart</Link>
+            <Link to="/cart" className="btn btn-outline-light">
+              <BsCartFill size={20}/>
+            </Link>
           </div>
         </div>
       </nav>

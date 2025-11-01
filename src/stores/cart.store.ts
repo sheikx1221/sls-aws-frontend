@@ -17,6 +17,7 @@ class Cart {
 
   constructor() {
     makeAutoObservable(this);
+    this.listCartItems();
   }
 
   getStates() {
@@ -60,14 +61,16 @@ class Cart {
       return this.cartItems.find(({ craft }) => craft.craftId == craftId);
     }
 
+    await this.listCartItems();
+    return this.cartItems.find(({ craft }) => craft.craftId == craftId);
+  }
+
+  private async listCartItems() {
     this.states.loading.get = true;
     const response = await getCartItemsFromAPI();
     this.states.loading.get = false;
     if ("error" in response) this.states.error.get = response.error;
-    else {
-      this.cartItems = response.items;
-      return this.cartItems.find(({ craft }) => craft.craftId == craftId);
-    }
+    else this.cartItems = response.items;
   }
 
   async updateItemInCart(cartId: string, qty: number) {

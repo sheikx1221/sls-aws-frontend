@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import type { Handicrafts } from "../../types/handicrafts";
 import "./skeleton.scss";
 import type { CartItem } from "../../types/cart";
+import { BsCartCheckFill } from "react-icons/bs";
+import { Loader } from "../common/loader";
+
 interface Props {
   item: Handicrafts;
   added: boolean;
@@ -62,9 +65,9 @@ export function ProductList(props: Props) {
               className="skeleton-btn black text-white btn"
             >
               {loading
-                ? "Adding to cart..."
+                ? <Loader />
                 : props.added
-                ? "Added"
+                ? <BsCartCheckFill size={20}/>
                 : "Add to cart"}
             </button>
           </div>
