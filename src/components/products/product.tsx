@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Handicrafts } from "../../types/handicrafts";
 import "./skeleton.scss";
+import type { CartItem } from "../../types/cart";
 interface Props {
   item: Handicrafts;
   added: boolean;
-  addToCart: (item: Handicrafts) => Promise<boolean>
+  addToCart: (item: Handicrafts, qty: number) => Promise<CartItem | null>
 }
 export function ProductList(props: Props) {
   const [loading, setLoading] = useState(false);
@@ -17,7 +18,7 @@ export function ProductList(props: Props) {
   const onAddToCart = async () => {
     if (!props.added) {
         setLoading(true);
-        const added = await props.addToCart(props.item);
+        const added = await props.addToCart(props.item, 1);
         if (!added) alert('Failed to add item in cart!, please try again');
         setLoading(false);
     }
