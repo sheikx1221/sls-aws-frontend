@@ -9,11 +9,15 @@ export function manageCart(items: CartItem[]) {
             mapItems.set(item.craft.craftId, { 
                 ...value,
                 qty: item.qty + value.qty,
-                amount: item.amount + value.amount
+                amount: item.amount + value.amount,
+                unitPrice: item.amount / item.qty
             });
         }
         else {
-            mapItems.set(item.craft.craftId, item);
+            mapItems.set(item.craft.craftId, {
+                ...item,
+                unitPrice: item.amount / item.qty
+            });
         }
     }
     console.log("mapItems = ",mapItems);

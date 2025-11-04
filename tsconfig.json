@@ -6,6 +6,7 @@
   ],
   "compilerOptions": {
     "verbatimModuleSyntax": true,
-    "useDefineForClassFields": true
+    "useDefineForClassFields": true,
+    "experimentalDecorators": true
   },
 }

@@ -10,5 +10,9 @@ export type CartItem = {
     qty: number,
     amount: number,
     createdAt: string,
-    updatedAt: string
+    updatedAt: string,
+
+    unitPrice?: number;
 }
+
+export type CartItemModify = CartItem & { action: "D" | "U" }

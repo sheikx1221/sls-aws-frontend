@@ -1,4 +1,4 @@
-import type { CartItem } from "../types/cart";
+import type { CartItem, CartItemModify } from "../types/cart";
 import type { Handicrafts } from "../types/handicrafts";
 import { manageCart } from "../utils/cart-functions";
 import fingerprint from "../utils/fingerprint";
@@ -45,7 +45,10 @@ export async function addToCartAPI(handicraft: Handicrafts, qty: number = 1) {
 
 export async function getCartItemsFromAPI() {
     const response = await get<RESPONSE_LIST>(`/carts?deviceFingerprint=${fingerprint}`);
-    if (response.success && response.result) return response.result;
+    if (response.success && response.result) {
+        const cart = manageCart(response.result.items);
+        return cart;
+    }
     else return { error: response.err };
 }
 
@@ -59,4 +62,13 @@ export async function deleteCartItemAPI(cartId: string) {
     const response = await remove<RESPONSE_DELETE>(`/carts?cartId=${cartId}`);
     if (response.success && response.result) return response.result;
     else return { error: response.err };  
+}
+
+export async function modifyCartItemsAPI(cartItems: CartItemModify[]) {
+    const response = await post<any, RESPONSE_LIST>(`/carts/modify`, { cartItems });
+    if (response.success && response.result) {
+        const cart = manageCart(response.result.items);
+        return cart;
+    }
+    else return { error: response.err };
 }
