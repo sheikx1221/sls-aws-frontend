@@ -2,8 +2,7 @@ import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
 import fingerprint from '../utils/fingerprint'
 
-const DEFAULT_BASE = 'https://81hyqbev5a.execute-api.us-east-1.amazonaws.com'
-const BASE_URL = (import.meta.env as any).VITE_API_BASE_URL ?? DEFAULT_BASE
+const BASE_URL = (import.meta.env as any).VITE_API_BASE_URL;
 
 const apiService: AxiosInstance = axios.create({
   baseURL: BASE_URL,
