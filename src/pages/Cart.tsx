@@ -46,7 +46,7 @@ const Cart = observer(() => {
 
     const getCart = useEffectEvent(async () => {
         const response = await cartStore.getCartItems();
-        setCart(response);
+        setCart(Array.isArray(response) ? [...response]: null);
     });
     useEffect(() => {
         getCart();
