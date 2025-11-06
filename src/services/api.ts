@@ -11,6 +11,8 @@ const apiService: AxiosInstance = axios.create({
   },
 });
 
+console.log("BASE_URL = ",BASE_URL);
+
 apiService.interceptors.request.use((config) => {
   try {
     const sessionId = fingerprint;
