@@ -1,8 +1,9 @@
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
-import Home from './pages/Home'
-import Product from './pages/Product';
 import { BsCartFill } from "react-icons/bs";
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { Auth } from './pages/Auth';
 import Cart from './pages/Cart';
+import Home from './pages/Home';
+import Product from './pages/Product';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/crafts/:craftId" element={<Product />}/>
           <Route path="/cart" element={<Cart />}/>
+          <Route path='/cognito-signin' element={<Auth />}/>
         </Routes>
       </main>
     </BrowserRouter>
