@@ -4,8 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { cartStore } from "../stores/cart.store";
 import type { CartItem } from "../types/cart";
 import { Loader } from "../components/common/loader";
+import { useAuth } from "react-oidc-context";
 
 const Cart = observer(() => {
+    const auth = useAuth();
     const [cart, setCart] = useState<CartItem[] | null>();
     const cartStates = cartStore.getStates();
     const navigation = useNavigate();
@@ -32,11 +34,13 @@ const Cart = observer(() => {
     }, [cart]);
 
     const hasChanges = () => {
-        console.log({ totalCart, totalTemp, quantityCart, quantityTemp });
         if (totalCart !== totalTemp || quantityCart !== quantityTemp) return true;
     };
 
-    const handleCheckout = async () => {};
+    const handleCheckout = () => {
+        console.log("called checkout")
+        auth.signinRedirect();
+    };
     const retrySearch = () => {
         getCart();
     };
