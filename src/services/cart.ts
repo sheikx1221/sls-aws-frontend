@@ -1,7 +1,6 @@
 import type { CartItem, CartItemModify } from "../types/cart";
 import type { Handicrafts } from "../types/handicrafts";
 import { manageCart } from "../utils/cart-functions";
-import fingerprint from "../utils/fingerprint";
 import { get, post, put, remove } from "./api";
 
 type RESPONSE_CREATE = {
@@ -33,7 +32,7 @@ export async function addToCartAPI(handicraft: Handicrafts, qty: number = 1) {
         image: handicraft.images[0],
         craftId: handicraft.craftId,
         category: handicraft.category,
-        deviceFingerprint: fingerprint,
+        deviceFingerprint: "{{fingerprint}}",
     });
 
     if (response.success && response.result) {
@@ -44,7 +43,7 @@ export async function addToCartAPI(handicraft: Handicrafts, qty: number = 1) {
 }
 
 export async function getCartItemsFromAPI() {
-    const response = await get<RESPONSE_LIST>(`/carts?deviceFingerprint=${fingerprint}`);
+    const response = await get<RESPONSE_LIST>(`/carts?deviceFingerprint={{fingerprint}}`);
     if (response.success && response.result) {
         const cart = manageCart(response.result.items);
         return cart;
